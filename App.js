@@ -1,11 +1,9 @@
 import React from 'react';
-// import Layout from './src/components/Layout';
-import ListScrollViewRefreshControl from './src/components/ListScrollViewRefreshControl';
-// import {View , Text} from 'react-native';
+import SectionListTest from './src/components/SectionListTest';
 
 const App = () => {
   return (
-    <ListScrollViewRefreshControl />
+    <SectionListTest />
   );
 }
 export default App;
