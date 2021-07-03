@@ -1,9 +1,9 @@
 import React from 'react';
-import TextInputKeyboard from './src/components/TextInputKeyboard';
+import ButtonTouchablePressable from './src/components/ButtonTouchablePressable';
 
 const App = () => {
   return (
-    <TextInputKeyboard />
+    <ButtonTouchablePressable />
   );
 }
 export default App;
