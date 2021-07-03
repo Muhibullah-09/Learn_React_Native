@@ -1,9 +1,9 @@
 import React from 'react';
-import SectionListTest from './src/components/SectionListTest';
+import TextInputKeyboard from './src/components/TextInputKeyboard';
 
 const App = () => {
   return (
-    <SectionListTest />
+    <TextInputKeyboard />
   );
 }
 export default App;

@@ -19,7 +19,6 @@ function SectionListTest() {
     }
     return (
         <SectionList
-            inverted
             keyExtractor={(item, index) => index.toString()}
             sections={Items}
             renderItem={({ item }) => (
