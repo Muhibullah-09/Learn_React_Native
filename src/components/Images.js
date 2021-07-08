@@ -12,7 +12,7 @@ import {
     ImageBackground
 } from 'react-native';
 
-import Button from './propsComp/Button';
+import Button from '../propsComp/Button';
 
 const DissmissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
