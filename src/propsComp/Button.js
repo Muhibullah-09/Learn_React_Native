@@ -1,20 +1,20 @@
-import React from 'react'
+import React from 'react';
 import {
+    Pressable,
     Text,
     StyleSheet,
-    Pressable,
 } from 'react-native';
 function Button(props) {
     return (
         <Pressable
-            onPress={props.ButtonHandler}
-            android_ripple={{ color: '00f' }}
-            style={({ pressed }) =>
-                [
-                    styles.button,
-                    { backgroundColor: pressed ? '#2D8D5D' : '#86D6AE' }
-                ]
-            }
+            onPress={props.onPressFunction}
+            hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
+            android_ripple={{ color: '#00000050' }}
+            style={({ pressed }) => [
+                { backgroundColor: pressed ? '#dddddd' : props.color },
+                styles.button,
+                { ...props.style }
+            ]}
         >
             <Text style={styles.text}>
                 {props.title}
@@ -25,16 +25,17 @@ function Button(props) {
 
 const styles = StyleSheet.create({
     text: {
-        color: '#000000',
+        color: '#ffffff',
         fontSize: 20,
         margin: 10,
         textAlign: 'center',
     },
-
     button: {
         width: 150,
         height: 50,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 5,
+        margin: 10,
     },
-});
+})
 export default Button;
