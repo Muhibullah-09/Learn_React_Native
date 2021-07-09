@@ -8,24 +8,58 @@ import {
     Alert,
 } from 'react-native';
 import CustomButton from '../propsComp/Button';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import SQLite from 'react-native-sqlite-storage';
+
+const db = SQLite.openDatabase(
+    {
+        name: 'MainDB',
+        location: 'default',
+    },
+    () => { },
+    error => { console.log(error) }
+);
 
 function Login({ navigation }) {
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
 
+
     useEffect(() => {
+        createTable();
         getData();
     }, []);
 
+    const createTable = () => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS "
+                + "Users "
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Age INTEGER);"
+            )
+        })
+    }
+
     const getData = () => {
         try {
-            AsyncStorage.getItem('UserData')
-                .then(value => {
-                    if (value != null) {
-                        navigation.navigate('Home');
+            // AsyncStorage.getItem('UserData')
+            //     .then(value => {
+            //         if (value != null) {
+            //             navigation.navigate('Home');
+            //         }
+            //     })
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT Name, Age FROM Users",
+                    [],
+                    (tx, results) => {
+                        var len = results.rows.length;
+                        if (len > 0) {
+                            navigation.navigate('Home');
+                        }
                     }
-                })
+                )
+            })
         } catch (error) {
             console.log(error);
         }
@@ -36,11 +70,20 @@ function Login({ navigation }) {
             Alert.alert('Warning!', 'Please write your data.')
         } else {
             try {
-                var user = {
-                    Name: name,
-                    Age: age
-                }
-                await AsyncStorage.setItem('UserData', JSON.stringify(user));
+                // var user = {
+                //     Name: name,
+                //     Age: age
+                // }
+                // await AsyncStorage.setItem('UserData', JSON.stringify(user));
+                await db.transaction(async (tx) => {
+                    // await tx.executeSql(
+                    //     "INSERT INTO Users (Name, Age) VALUES ('" + name + "'," + age + ")"
+                    // );
+                    await tx.executeSql(
+                        "INSERT INTO Users (Name, Age) VALUES (?,?)",
+                        [name, age]
+                    );
+                })
                 navigation.navigate('Home');
             } catch (error) {
                 console.log(error);
@@ -50,13 +93,19 @@ function Login({ navigation }) {
 
     return (
         <View style={styles.body} >
+            {/* For AsyncStorage 
             <Image
                 style={styles.logo}
                 source={require('../assets/images/done.png')}
             />
             <Text style={styles.text}>
                 Async Storage
-            </Text>
+            </Text> */}
+            {/* For SQ-Lite Database */}
+            <Image
+                style={styles.logo}
+                source={require('../assets/images/sqlite.png')}
+            />
             <TextInput
                 style={styles.input}
                 placeholder='Enter your name'
@@ -83,14 +132,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#0080ff',
     },
     logo: {
-        width: 100,
-        height: 100,
+        width: 300,
+        height: 200,
         margin: 20,
     },
     text: {
         fontSize: 30,
         color: '#ffffff',
-        marginBottom: 130,
+        fontFamily: 'Lobster-Regular',
+        marginBottom: 100,
     },
     input: {
         width: 300,
