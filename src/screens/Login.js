@@ -3,10 +3,12 @@ import {
     View,
     StyleSheet,
     Image,
-    Text,
     TextInput,
     Alert,
+    Text
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { setName, setAge } from '../../src/redux';
 import CustomButton from '../propsComp/Button';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import SQLite from 'react-native-sqlite-storage';
@@ -21,8 +23,11 @@ const db = SQLite.openDatabase(
 );
 
 function Login({ navigation }) {
-    const [name, setName] = useState('');
-    const [age, setAge] = useState('');
+    const { name, age } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
+    // const [name, setName] = useState('');
+    // const [age, setAge] = useState('');
 
 
     useEffect(() => {
@@ -66,10 +71,12 @@ function Login({ navigation }) {
     }
 
     const setData = async () => {
-        if (name.length == 0 || age.length == 0) {
+        if (name.length == 0 || age == 0) {
             Alert.alert('Warning!', 'Please write your data.')
         } else {
             try {
+                dispatch(setName(name));
+                dispatch(setAge(age));
                 // var user = {
                 //     Name: name,
                 //     Age: age
@@ -104,17 +111,25 @@ function Login({ navigation }) {
             {/* For SQ-Lite Database */}
             <Image
                 style={styles.logo}
-                source={require('../assets/images/sqlite.png')}
+                // source={require('../assets/images/country.png')}
+                source={require('../assets/images/withoutbg.png')}
             />
+            <Text style={styles.text}>
+                Country Location Picker
+            </Text> 
             <TextInput
                 style={styles.input}
                 placeholder='Enter your name'
-                onChangeText={(value) => setName(value)}
+                onChangeText={(value) => dispatch(setName(value))}
+            // onChangeText={(value) => setName(value)}
+
             />
             <TextInput
                 style={styles.input}
                 placeholder='Enter your age'
-                onChangeText={(value) => setAge(value)}
+                onChangeText={(value) => dispatch(setAge(value))}
+                // onChangeText={(value) => setAge(value)}
+                keyboardType='numeric'
             />
             <CustomButton
                 title='Login'
@@ -132,15 +147,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#0080ff',
     },
     logo: {
+        // backgroundColor: '#000',
         width: 300,
-        height: 200,
+        height: 150,
         margin: 20,
     },
     text: {
         fontSize: 30,
         color: '#ffffff',
         fontFamily: 'Lobster-Regular',
-        marginBottom: 100,
+        marginBottom: 30,
     },
     input: {
         width: 300,

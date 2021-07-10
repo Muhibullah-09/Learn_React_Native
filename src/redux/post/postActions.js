@@ -10,7 +10,9 @@ export const fetchPosts = () => {
     dispatch(fetchPostsRequest())
     axios
       // .get('https://jsonplaceholder.typicode.com/posts')
-      .get('https://restcountries.eu/rest/v2/all')
+      // .get('https://restcountries.eu/rest/v2/all')
+      .get('https://mocki.io/v1/aac8b81a-139c-4235-82e6-0dbadf33f2b7')
+      // https://mocki.io/v1/aac8b81a-139c-4235-82e6-0dbadf33f2b7
       .then(response => {
         // response.data is the POSTS
         const posts = response.data

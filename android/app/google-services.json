@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "164956783821",
+    "project_id": "react-native-test-push-not",
+    "storage_bucket": "react-native-test-push-not.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164956783821:android:9dae953b20e2f3acd5d584",
+        "android_client_info": {
+          "package_name": "com.learnreactnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164956783821-u12dslr10k4r51m374tfdopk5vagnad8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2cpWcFZC6TwfnV34mlZ_BhplMAGgHV-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164956783821-u12dslr10k4r51m374tfdopk5vagnad8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

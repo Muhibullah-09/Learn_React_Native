@@ -8,6 +8,8 @@ import {
     Alert,
     TextInput,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+// import { setName, setAge } from '../../src/redux';
 import CustomButton from '../propsComp/Button';
 import GlobalStyle from '../styles/GlobalStyles';
 
@@ -24,9 +26,12 @@ const db = SQLite.openDatabase(
 
 
 //Main Component
-function Home({ navigation, route }) {
-    const [name, setName] = useState('');
-    const [age, setAge] = useState('');
+function Home({ navigation }) {
+    const { name, age } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
+    // const [name, setName] = useState('');
+    // const [age, setAge] = useState('');
 
     useEffect(() => {
         getData();
@@ -51,8 +56,10 @@ function Home({ navigation, route }) {
                         if (len > 0) {
                             var userName = results.rows.item(0).Name;
                             var userAge = results.rows.item(0).Age;
-                            setName(userName);
-                            setAge(userAge);
+                            // setName(userName);
+                            // setAge(userAge);
+                            dispatch(setName(userName));
+                            dispatch(setAge(userAge));
                         }
                     }
                 )
@@ -62,29 +69,29 @@ function Home({ navigation, route }) {
         }
     }
 
-    const updateData = async () => {
-        if (name.length == 0) {
-            Alert.alert('Warning!', 'Please write your data.')
-        } else {
-            try {
-                // var user = {
-                //     Name: name
-                // }
-                // await AsyncStorage.mergeItem('UserData', JSON.stringify(user));
-                // Alert.alert('Success!', 'Your data has been updated.');
-                db.transaction((tx) => {
-                    tx.executeSql(
-                        "UPDATE Users SET Name=?",
-                        [name],
-                        () => { Alert.alert('Success!', 'Your data has been updated.') },
-                        error => { console.log(error) }
-                    )
-                })
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
+    // const updateData = async () => {
+    //     if (name.length == 0) {
+    //         Alert.alert('Warning!', 'Please write your data.')
+    //     } else {
+    //         try {
+    //             // var user = {
+    //             //     Name: name
+    //             // }
+    //             // await AsyncStorage.mergeItem('UserData', JSON.stringify(user));
+    //             // Alert.alert('Success!', 'Your data has been updated.');
+    //             db.transaction((tx) => {
+    //                 tx.executeSql(
+    //                     "UPDATE Users SET Name=?",
+    //                     [name],
+    //                     () => { Alert.alert('Success!', 'Your data has been updated.') },
+    //                     error => { console.log(error) }
+    //                 )
+    //             })
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    // }
 
     const removeData = async () => {
         try {
@@ -102,7 +109,9 @@ function Home({ navigation, route }) {
             console.log(error);
         }
     }
-
+    const countryNavigator = () => {
+        navigation.navigate('Countries');
+    }
     return (
         <View style={styles.body}>
             <Text style={[
@@ -119,20 +128,29 @@ function Home({ navigation, route }) {
             </Text>
             <TextInput
                 style={styles.input}
-                placeholder='Enter your name'
+                placeholder='Update your name'
                 value={name}
-                onChangeText={(value) => setName(value)}
+                onChangeText={(value) => dispatch(setName(value))}
+            // onChangeText={(value) =>setName(value)}
+
             />
-            <CustomButton
+            {/* <CustomButton
                 title='Update'
                 color='#ff7f00'
                 onPressFunction={updateData}
-            />
+            /> */}
+
             <CustomButton
-                title='Remove'
+                title='Logout'
                 color='#f40100'
                 onPressFunction={removeData}
             />
+            <CustomButton
+                title='Countries'
+                color='#f40120'
+                onPressFunction={countryNavigator}
+            />
+            {/* <PushNotificationLocal /> */}
         </View>
     )
 }
