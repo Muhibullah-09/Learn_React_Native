@@ -10,17 +10,17 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { setName, setAge } from '../../src/redux';
 import CustomButton from '../propsComp/Button';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import SQLite from 'react-native-sqlite-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import SQLite from 'react-native-sqlite-storage';
 
-const db = SQLite.openDatabase(
-    {
-        name: 'MainDB',
-        location: 'default',
-    },
-    () => { },
-    error => { console.log(error) }
-);
+// const db = SQLite.openDatabase(
+//     {
+//         name: 'MainDB',
+//         location: 'default',
+//     },
+//     () => { },
+//     error => { console.log(error) }
+// );
 
 function Login({ navigation }) {
     const { name, age } = useSelector(state => state.user);
@@ -31,44 +31,19 @@ function Login({ navigation }) {
 
 
     useEffect(() => {
-        createTable();
+        // createTable();
         getData();
     }, []);
 
-    const createTable = () => {
-        db.transaction((tx) => {
-            tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS "
-                + "Users "
-                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Age INTEGER);"
-            )
-        })
-    }
-
-    const getData = () => {
-        try {
-            // AsyncStorage.getItem('UserData')
-            //     .then(value => {
-            //         if (value != null) {
-            //             navigation.navigate('Home');
-            //         }
-            //     })
-            db.transaction((tx) => {
-                tx.executeSql(
-                    "SELECT Name, Age FROM Users",
-                    [],
-                    (tx, results) => {
-                        var len = results.rows.length;
-                        if (len > 0) {
-                            navigation.navigate('Home');
-                        }
-                    }
-                )
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // const createTable = () => {
+    //     db.transaction((tx) => {
+    //         tx.executeSql(
+    //             "CREATE TABLE IF NOT EXISTS "
+    //             + "Users "
+    //             + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Age INTEGER);"
+    //         )
+    //     })
+    // }
 
     const setData = async () => {
         if (name.length == 0 || age == 0) {
@@ -77,25 +52,50 @@ function Login({ navigation }) {
             try {
                 dispatch(setName(name));
                 dispatch(setAge(age));
-                // var user = {
-                //     Name: name,
-                //     Age: age
-                // }
-                // await AsyncStorage.setItem('UserData', JSON.stringify(user));
-                await db.transaction(async (tx) => {
-                    // await tx.executeSql(
-                    //     "INSERT INTO Users (Name, Age) VALUES ('" + name + "'," + age + ")"
-                    // );
-                    await tx.executeSql(
-                        "INSERT INTO Users (Name, Age) VALUES (?,?)",
-                        [name, age]
-                    );
-                })
+                var user = {
+                    Name: name,
+                    Age: age
+                }
+                await AsyncStorage.setItem('UserData', JSON.stringify(user));
                 navigation.navigate('Home');
+
             } catch (error) {
                 console.log(error);
             }
+            // await db.transaction(async (tx) => {
+            //     // await tx.executeSql(
+            //     //     "INSERT INTO Users (Name, Age) VALUES ('" + name + "'," + age + ")"
+            //     // );
+            //     await tx.executeSql(
+            //         "INSERT INTO Users (Name, Age) VALUES (?,?)",
+            //         [name, age]
+            //     );
+            // })
         }
+    }
+    const getData = () => {
+        try {
+            AsyncStorage.getItem('UserData')
+                .then(value => {
+                    if (value != null) {
+                        navigation.navigate('Home');
+                    }
+                })
+        } catch (error) {
+            console.log(error);
+        }
+        // db.transaction((tx) => {
+        //     tx.executeSql(
+        //         "SELECT Name, Age FROM Users",
+        //         [],
+        //         (tx, results) => {
+        //             var len = results.rows.length;
+        //             if (len > 0) {
+        //                 navigation.navigate('Home');
+        //             }
+        //         }
+        //     )
+        // })
     }
 
     return (
@@ -116,7 +116,7 @@ function Login({ navigation }) {
             />
             <Text style={styles.text}>
                 Country Location Picker
-            </Text> 
+            </Text>
             <TextInput
                 style={styles.input}
                 placeholder='Enter your name'

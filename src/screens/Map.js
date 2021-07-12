@@ -6,11 +6,29 @@ import {
 } from 'react-native';
 import GlobalStyle from '../styles/GlobalStyles';
 import MapView from 'react-native-maps';
+import CustomButton from '../propsComp/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Map({ route }) {
+export default function Map({ navigation, route }) {
 
     const { city, lat, lng } = route.params;
 
+    const removeData = async () => {
+        try {
+            navigation.navigate('Login');
+            await AsyncStorage.clear();
+            // db.transaction((tx) => {
+            //     tx.executeSql(
+            //         "DELETE FROM Users",
+            //         [],
+            //         () => { navigation.navigate('Login') },
+            //         error => { console.log(error) }
+            //     )
+            // })
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <View style={styles.body}>
             <Text style={[
@@ -19,6 +37,11 @@ export default function Map({ route }) {
             ]}>
                 {city}
             </Text>
+            <CustomButton
+                title='Logout'
+                color='#f40120'
+                onPressFunction={removeData}
+            />
             <MapView
                 style={styles.map}
                 initialRegion={{

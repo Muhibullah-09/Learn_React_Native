@@ -1,5 +1,5 @@
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import SQLite from 'react-native-sqlite-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import SQLite from 'react-native-sqlite-storage';
 import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
@@ -9,20 +9,20 @@ import {
     TextInput,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-// import { setName, setAge } from '../../src/redux';
+import { setName, setAge } from '../../src/redux';
 import CustomButton from '../propsComp/Button';
 import GlobalStyle from '../styles/GlobalStyles';
 
 
-//Database Creation
-const db = SQLite.openDatabase(
-    {
-        name: 'MainDB',
-        location: 'default',
-    },
-    () => { },
-    error => { console.log(error) }
-);
+// //Database Creation
+// const db = SQLite.openDatabase(
+//     {
+//         name: 'MainDB',
+//         location: 'default',
+//     },
+//     () => { },
+//     error => { console.log(error) }
+// );
 
 
 //Main Component
@@ -39,31 +39,33 @@ function Home({ navigation }) {
 
     const getData = () => {
         try {
-            // AsyncStorage.getItem('UserData')
-            //     .then(value => {
-            //         if (value != null) {
-            //             let user = JSON.parse(value);
-            //             setName(user.Name);
-            //             setAge(user.Age);
-            //         }
-            //     })
-            db.transaction((tx) => {
-                tx.executeSql(
-                    "SELECT Name, Age FROM Users",
-                    [],
-                    (tx, results) => {
-                        var len = results.rows.length;
-                        if (len > 0) {
-                            var userName = results.rows.item(0).Name;
-                            var userAge = results.rows.item(0).Age;
-                            // setName(userName);
-                            // setAge(userAge);
-                            dispatch(setName(userName));
-                            dispatch(setAge(userAge));
-                        }
+            AsyncStorage.getItem('UserData')
+                .then(value => {
+                    if (value != null) {
+                        let user = JSON.parse(value);
+                        // setName(user.Name);
+                        // setAge(user.Age);
+                        dispatch(setName(user.Name));
+                        dispatch(setAge(user.Age));
                     }
-                )
-            })
+                })
+            // db.transaction((tx) => {
+            //     tx.executeSql(
+            //         "SELECT Name, Age FROM Users",
+            //         [],
+            //         (tx, results) => {
+            //             var len = results.rows.length;
+            //             if (len > 0) {
+            //                 var userName = results.rows.item(0).Name;
+            //                 var userAge = results.rows.item(0).Age;
+            //                 // setName(userName);
+            //                 // setAge(userAge);
+            //                 dispatch(setName(userName));
+            //                 dispatch(setAge(userAge));
+            //             }
+            //         }
+            //     )
+            // })
         } catch (error) {
             console.log(error);
         }
@@ -95,16 +97,16 @@ function Home({ navigation }) {
 
     const removeData = async () => {
         try {
-            // await AsyncStorage.clear();
-            db.transaction((tx) => {
-                tx.executeSql(
-                    "DELETE FROM Users",
-                    [],
-                    () => { navigation.navigate('Login') },
-                    error => { console.log(error) }
-                )
-            })
             navigation.navigate('Login');
+            await AsyncStorage.clear();
+            // db.transaction((tx) => {
+            //     tx.executeSql(
+            //         "DELETE FROM Users",
+            //         [],
+            //         () => { navigation.navigate('Login') },
+            //         error => { console.log(error) }
+            //     )
+            // })
         } catch (error) {
             console.log(error);
         }
@@ -126,14 +128,14 @@ function Home({ navigation }) {
             ]}>
                 Your age is {age}
             </Text>
-            <TextInput
+            {/* <TextInput
                 style={styles.input}
                 placeholder='Update your name'
                 value={name}
                 onChangeText={(value) => dispatch(setName(value))}
             // onChangeText={(value) =>setName(value)}
 
-            />
+            /> */}
             {/* <CustomButton
                 title='Update'
                 color='#ff7f00'

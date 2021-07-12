@@ -6,7 +6,7 @@ import GlobalStyle from '../styles/GlobalStyles';
 import PushNotification from 'react-native-push-notification';
 
 
-function Countries({navigation , route}) {
+function Countries({ navigation }) {
     const postData = useSelector(state => state.post);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -24,7 +24,7 @@ function Countries({navigation , route}) {
         )
     }
 
-    const handleNotification = (item , index) => {
+    const handleNotification = (item, index) => {
 
         PushNotification.cancelAllLocalNotifications();
         PushNotification.localNotification({
@@ -62,20 +62,21 @@ function Countries({navigation , route}) {
                         // numColumns={2}
                         keyExtractor={(item, index) => index.toString()}
                         data={postData.posts}
-                        renderItem={({ item , index}) => (
+                        renderItem={({ item, index }) => (
                             <TouchableOpacity
-                                onPress={() => { 
-                                    handleNotification(item , index);
-                                    navigation.navigate('Map',{ 
-                                        city: item.city,
-                                        lat: item.latitude,
-                                        lng: item.lng, 
+                                onPress={() => {
+                                    handleNotification(item, index);
+                                    navigation.navigate('Map', {
+                                        city: item.capital,
+                                        lat: item.latlng[0],
+                                        lng: item.latlng[1],
                                     });
                                 }}
                             >
                                 <View style={styles.items}>
-                                    <Text style={[GlobalStyle.ButtonStyle, styles.text]}>{item.country}</Text>
-                                    <Text style={styles.text}>{item.city}</Text>
+                                    <Text style={[GlobalStyle.ButtonStyle, styles.text]}>{item.name}</Text>
+                                    <Text style={styles.text}>{item.capital}</Text>
+                                    {/* <Text style={styles.text}>{item.latlng[0]}</Text> */}
                                     {/* <Text style={styles.text}>{item.population}</Text> */}
                                 </View>
                             </TouchableOpacity>
@@ -122,4 +123,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Countries
+export default Countries;

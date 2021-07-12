@@ -5,7 +5,7 @@ import {
 
 const initialState = {
     name: '',
-    age: 0
+    age: ''
 };
 
 const reducer = (state = initialState, action) => {
