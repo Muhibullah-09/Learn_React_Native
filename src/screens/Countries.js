@@ -68,7 +68,7 @@ function Countries({navigation , route}) {
                                     handleNotification(item , index);
                                     navigation.navigate('Map',{ 
                                         city: item.city,
-                                        lat: item.lat,
+                                        lat: item.latitude,
                                         lng: item.lng, 
                                     });
                                 }}
